@@ -1,0 +1,161 @@
+[
+    [
+        "empty case",
+        {
+            "movements": [],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": 0 }
+            ]
+        },
+        [],
+        true
+    ],
+    [
+        "simple case",
+        {
+            "movements": [
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 }
+            ],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": 10 }
+            ]
+        },
+        [],
+        true
+    ],
+    [
+        "simple case with silent duplicates",
+        {
+            "movements": [
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 },
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 },
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 },
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 },
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 }
+            ],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": 10 }
+            ]
+        },
+        [],
+        true
+    ],
+    [
+        "skipping data for inconsistent time",
+        {
+            "movements": [
+                { "id": 1, "date": "1999-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 },
+                { "id": 2, "date": "2100-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 }
+            ],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": 0 }
+            ]
+        },
+        [
+            {
+                "message": "[skipped] out of bound movement",
+                "frame": [
+                    null,
+                    { "date": "2021-01-01T00:00:00.000Z", "balance": 0 }
+                ],
+                "movements": [
+                    { "id": 1, "date": "1999-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 }
+                ]
+            },
+            {
+                "message": "[skipped] out of bound movement",
+                "frame": [
+                    { "date": "2021-01-02T00:00:00.000Z", "balance": 0 },
+                    null
+                ],
+                "movements": [
+                    { "id": 2, "date": "2100-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 }
+                ]
+            }
+        ],
+        true
+    ],
+    [
+        "invalid sum",
+        {
+            "movements": [
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 },
+                { "id": 2, "date": "2021-01-01T01:01:02.000Z", "label": "credited by 10 cents", "amount": 10 }
+            ],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": 11 }
+            ]
+        },
+        [
+            {
+                "message": "[invalid] inconsistent frame: movements sum is 20, frame delta is 11",
+                "frame": [
+                    { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                    { "date": "2021-01-02T00:00:00.000Z", "balance": 11 }
+                ],
+                "movements": [
+                    { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 },
+                    { "id": 2, "date": "2021-01-01T01:01:02.000Z", "label": "credited by 10 cents", "amount": 10 }
+                ]
+            }
+        ],
+        false
+    ],
+    [
+        "invalid sums (1st OK, 2nd NOK, 3rd OK, 4th NOK)",
+        {
+            "movements": [
+
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 },
+                { "id": 2, "date": "2021-01-01T01:01:02.000Z", "label": "credited by 10 cents", "amount": 10 },
+                { "id": 3, "date": "2021-01-01T01:01:03.000Z", "label": "paid Big Joe in the playgruond", "amount": -30 },
+
+                { "id": 4, "date": "2021-01-02T01:01:02.000Z", "label": "mom gave me 50 cents", "amount": 50 },
+                { "id": 5, "date": "2021-01-02T01:01:02.000Z", "label": "I stole Grandma for 1 euro", "amount": 100 },
+
+                { "id": 6, "date": "2021-01-03T01:01:02.000Z", "label": "bought candies", "amount": -50 },
+                { "id": 7, "date": "2021-01-03T01:01:02.000Z", "label": "the shopkeeper realized I had one in my pocket", "amount": -5 },
+
+                { "id": 8, "date": "2021-01-04T01:01:02.000Z", "label": "weekly money, w00t!", "amount": 1000 },
+                { "id": 9, "date": "2021-01-04T01:01:02.000Z", "label": "weird fraudulent transaction, probably Big Joe", "amount": -500 }
+            ],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": -10 },
+                { "date": "2021-01-03T00:00:00.000Z", "balance": 40 },
+                { "date": "2021-01-04T00:00:00.000Z", "balance": -15 },
+                { "date": "2021-01-05T00:00:00.000Z", "balance": 985 }
+            ]
+        },
+        [
+            {
+                "message": "[invalid] inconsistent frame: movements sum is 150, frame delta is 50",
+                "frame": [
+                    { "date": "2021-01-02T00:00:00.000Z", "balance": -10 },
+                    { "date": "2021-01-03T00:00:00.000Z", "balance": 40 }
+                ],
+                "movements": [
+                    { "id": 4, "date": "2021-01-02T01:01:02.000Z", "label": "mom gave me 50 cents", "amount": 50 },
+                    { "id": 5, "date": "2021-01-02T01:01:02.000Z", "label": "I stole Grandma for 1 euro", "amount": 100 }
+                ]
+            },
+            {
+                "message": "[invalid] inconsistent frame: movements sum is 500, frame delta is 1000",
+                "frame": [
+                    { "date": "2021-01-04T00:00:00.000Z", "balance": -15 },
+                    { "date": "2021-01-05T00:00:00.000Z", "balance": 985 }
+                ],
+                "movements": [
+                    { "id": 8, "date": "2021-01-04T01:01:02.000Z", "label": "weekly money, w00t!", "amount": 1000 },
+                    { "id": 9, "date": "2021-01-04T01:01:02.000Z", "label": "weird fraudulent transaction, probably Big Joe", "amount": -500 }
+                ]
+            }
+        ],
+        false
+    ]
+]

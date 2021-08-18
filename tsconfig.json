@@ -1,0 +1,7 @@
+{
+    "extends": "./tsconfig.lint.json",
+    "exclude": [
+        "**/*.json",
+        "**/*.spec.ts"
+    ]
+}

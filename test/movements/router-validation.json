@@ -1,0 +1,60 @@
+[
+    [
+        "empty case (balance must have min-length=2)",
+        {
+            "movements": [],
+            "balances": []
+        },
+        false
+    ],
+    [
+        "proper emmpty case",
+        {
+            "movements": [],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": 0 }
+            ]
+        },
+        true
+    ],
+    [
+        "proper standard case",
+        {
+            "movements": [
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 }
+            ],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": 10 }
+            ]
+        },
+        true
+    ],
+    [
+        "wrong movement shape",
+        {
+            "movements": [
+                { "id": 1, "datezzz": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 }
+            ],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "date": "2021-01-02T00:00:00.000Z", "balance": 10 }
+            ]
+        },
+        false
+    ],
+    [
+        "wrong balances shape",
+        {
+            "movements": [
+                { "id": 1, "date": "2021-01-01T01:01:01.000Z", "label": "credited by 10 cents", "amount": 10 }
+            ],
+            "balances": [
+                { "date": "2021-01-01T00:00:00.000Z", "balance": 0 },
+                { "datezzz": "2021-01-02T00:00:00.000Z", "balance": 10 }
+            ]
+        },
+        false
+    ]
+]

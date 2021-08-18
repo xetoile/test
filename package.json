@@ -1,0 +1,90 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "test",
+    "main": "dist/index.js",
+    "scripts": {
+        "reload": "npm run build && npm run start",
+        "start": "node .",
+        "build": "tsc",
+        "test": "jest",
+        "lint": "eslint \"src/**/*.ts\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/xetoile/test.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/xetoile/test/issues"
+    },
+    "homepage": "https://github.com/xetoile/test#readme",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "joi": "^17.4.2"
+    },
+    "devDependencies": {
+        "@tsconfig/node14": "^1.0.1",
+        "@types/cors": "^2.8.12",
+        "@types/express": "^4.17.13",
+        "@types/jest": "^27.0.1",
+        "@types/node": "^16.6.1",
+        "@types/supertest": "^2.0.11",
+        "@typescript-eslint/parser": "^4.29.2",
+        "eslint": "^7.32.0",
+        "jest": "^27.0.6",
+        "supertest": "^6.1.6",
+        "ts-jest": "^27.0.5",
+        "typescript": "^4.3.5"
+    },
+    "eslintConfig": {
+        "parser": "@typescript-eslint/parser",
+        "extends": "eslint:recommended",
+        "parserOptions": {
+            "ecmaVersion": 2020,
+            "project": "tsconfig.lint.json",
+            "sourceType": "module"
+        },
+        "root": true,
+        "env": {
+            "node": true,
+            "jest": true
+        },
+        "rules": {
+            "no-namespace": "off",
+            "no-unused-vars": "off",
+            "eol-last": [
+                "error",
+                "always"
+            ],
+            "semi": "error"
+        }
+    },
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "rootDir": "src",
+        "setupFilesAfterEnv": [
+            "<rootDir>/../jest.setup.ts"
+        ],
+        "testRegex": "\\.spec\\.ts$",
+        "transform": {
+            "\\.[jt]s$": "ts-jest"
+        },
+        "coverageDirectory": "../coverage",
+        "collectCoverage": true,
+        "collectCoverageFrom": [
+            "**/*.ts"
+        ],
+        "testEnvironment": "node",
+        "clearMocks": true,
+        "resetMocks": true,
+        "restoreMocks": true
+    }
+}
